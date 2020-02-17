@@ -1,0 +1,13 @@
+version: '3'
+
+services: 
+    db:
+        build: ./db
+        ports:
+        - '9399:27017'
+        
+
+    server:
+        build: .
+        ports:
+        - '9669:9669'
