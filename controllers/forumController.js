@@ -21,7 +21,7 @@ router.post('/', async (req, res)=>{            //add later: ,auth - middleware
 
     let forum = new Forum({
         name: req.body.name,
-        description: req.body.description
+	description: req.body.description
     });
 
     forum = await forum.save();

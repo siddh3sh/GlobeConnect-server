@@ -29,8 +29,7 @@ router.post('/', async (req, res)=>{            //add later: ,auth - middleware
     // const {error} = validatePost(req.body);
     // if(err) return res.status(400).send(err.details[0].message);
 
-    const forumId = await Forum.find({name: req.body.forum}).select('_id');
-    
+	let forumId = await Forum.findOne({name: req.body.forum}).select('_id');    
     
     let post = new Post({
         user: req.body.user,
