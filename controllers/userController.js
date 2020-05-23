@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res)=>{
      const {error} = validate(req.body);
      if(error) return res.status(400).send(error.details[0].message);
- 	try{
+ 
      let user =  await User.findOne({email: req.body.email});   //check if already exist
      if(user) return res.status(400).send('User Already Registered');
 
@@ -55,9 +55,6 @@ router.post('/', async (req, res)=>{
     const token = user.generateAuthToken()
     const body = {authtoken: token}
     res.send(body);
-	}catch(error){
-		console.log(error.message);
-	}
 });
 
 
@@ -89,24 +86,14 @@ router.delete('/:id', async (req, res) => {
 //follow forum
 router.put('/follow-forum', async (req, res) => {
     try{
-	let user = await User.findById(req.body.user);
-	    let followed = false;
-	user.forums.forEach((item, index)=>{
-	if(item == req.body.forum){
-		followed = true;
-	}
-	});
-	if(followed) return res.send('following');
-	    else{
-        user = await User.findByIdAndUpdate(req.body.user,  { $push: {forums: req.body.forum} }, {new: true}).populate('forums').select('name forums');
+        const user = await User.findByIdAndUpdate(req.body.user,  { $push: {forums: req.body.forum} }, {new: true}).populate('forums').select('name forums');
         
         //if(!user) return res.status(404).send('User Not Found');
         res.send(user);
-	}
     }
     catch(error){
         //console.log(error.message)
-        console.log(error.message);
+        res.status(400).send(error.message);
     }
 });
 

@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema({
 
     comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'comment'}],
     
-    forums: [{type: mongoose.Schema.Types.ObjectId, ref: "forum"}]
+    forums: [{type: mongoose.Schema.Types.ObjectId, ref: "forum", unique: true}]
 
 });
 

@@ -8,8 +8,6 @@ const admin = require('../middleware/admin')
 const auth = require('../middleware/auth')
 const {User, validate} = require('../models/userModel')
 const {Forum} = require('../models/forumModel')
-const {Post} = require('../models/postModel')
-const {Comment} = require('../models/commentModel')
 
 
 //get users
@@ -33,26 +31,15 @@ router.put('/:id', async (req, res) => {
 
 //delete user
 router.delete('/:id', async (req, res) => {
-    try{
-    const user = await User.findByIdAndRemove(req.params.id);
-	await Post.deleteMany({user: user._id});
-	await Comment.deleteMany({user: user._id});
-	
+    const user = await User.findByIdAndRemove(req.params.id)
 
     if(!user) return res.status(404).send('User Not Found');
 
     res.send('deleted');
-	}
-	catch(error){
-		res.status(400).send(error);
-	}
 });
 
 //get single user
 router.get('/:id', async (req, res) => {
-    
-    
-    
     const user = await User.findById(req.params.id);
     if(!user) return res.status(404).send('User Not Found');
 
