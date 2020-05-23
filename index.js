@@ -47,7 +47,7 @@ if(!config.get('jwtPrivateKey')){
 //app.use(db)
 
 //fetch db details and connect to mongoDB
-const {username, password, host, port, database} = db;
+const {username, password, database} = db;
 
 //const mongoConnString = `mongodb://${host}:${port}/${database}`;
 
