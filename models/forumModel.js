@@ -6,8 +6,7 @@ const forumSchema = new mongoose.Schema({
         required: true,
         minlength: 2,
         maxlength: 255,
-        unique: true,
-        sparse: true
+        index: {unique: true, sparse: true}
     },
     description: {
         type: String 
