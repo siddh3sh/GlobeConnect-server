@@ -1,7 +1,7 @@
 module.exports = {
-				   username : "",
-				   password : "",
+				   username : "globeConnnect",
+				   password : "126712",
 				   host : "localhost",
 				   port : "27017",
-				   database : "GlobeConnect"
+				   database : "globeConnect"
 				   }

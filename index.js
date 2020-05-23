@@ -49,7 +49,10 @@ if(!config.get('jwtPrivateKey')){
 //fetch db details and connect to mongoDB
 const {username, password, host, port, database} = db;
 
-const mongoConnString = `mongodb://${host}:${port}/${database}`;
+//const mongoConnString = `mongodb://${host}:${port}/${database}`;
+
+const mongoConnString = `mongodb+srv://${username}:${password}@cluster0-2l6ic.mongodb.net/${database}?retryWrites=true&w=majority`
+
 console.log(mongoConnString)
 mongoose.connect(mongoConnString, { useFindAndModify: false })
 .then( ()=>{
