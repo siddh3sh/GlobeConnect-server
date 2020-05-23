@@ -74,6 +74,7 @@ app.use('/forum', forumController);
 app.use('/admin', adminController)
 
 //Setting Port and Starting Server
-app.listen(9669, () => {
-    console.log(`Server started on port 9669...`);
+const port = process.env.PORT || 9669;
+app.listen(port, () => {
+    console.log(`Server started on port ${port}...`);
 });
