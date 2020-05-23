@@ -1,6 +1,7 @@
 const config = require('config')
 const express = require('express');
 const mongoose = require('mongoose');
+const fs = require('fs');
 const db = require('./db/db');
 // const path = require('path');
 // const crypto = require('crypto');
@@ -18,6 +19,16 @@ const commentController = require('./controllers/commentController')
 const discussionController = require('./controllers/discussionController')
 const forumController = require('./controllers/forumController')
 const adminController = require('./controllers/adminController')
+
+
+
+//make dir if not present
+let dir = './uploads';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
 
 
 
