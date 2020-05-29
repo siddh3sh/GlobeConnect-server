@@ -89,19 +89,22 @@ router.delete('/:id', async (req, res) => {
 //follow forum
 router.put('/follow-forum', async (req, res) => {
     try{
-	let user = await User.findById(req.body.user);
-	    let followed = false;
-	user.forums.forEach((item, index)=>{
-	if(item == req.body.forum){
-		followed = true;
-	}
-	});
-	if(followed) return res.send('following');
-	    else{
-        user = await User.findByIdAndUpdate(req.body.user,  { $push: {forums: req.body.forum} }, {new: true}).populate('forums').select('name forums');
+        let user = await User.findById(req.body.user);
+        let followed = false;
+        user.forums.forEach((item, index)=>{
+            if(item == req.body.forum){
+                followed = true;
+            }
+
+        });
+
+        if(followed) return res.send('following');
         
-        //if(!user) return res.status(404).send('User Not Found');
-        res.send(user);
+        else{
+            user = await User.findByIdAndUpdate(req.body.user,  { $push: {forums: req.body.forum} }, {new: true}).populate('forums').select('name forums');
+            
+            //if(!user) return res.status(404).send('User Not Found');
+            res.send(user);
 	}
     }
     catch(error){
@@ -119,15 +122,15 @@ const MIME_TYPE_MAP ={
     
 }
 
-//const upload = multer({ dest: 'uploads' })
-
 const storage = multer.diskStorage({
+    
     //exeuted when multer try to save a file
     //setting destination
-     destination: (req, file, callback)=>{
+    destination: (req, file, callback)=>{
         callback(null, "uploads/") //folder relative to index.js
-     },
-     //setting file name
+    },
+
+    //setting file name
     filename: (req, file, callback) => {
         const name = file.originalname.toLowerCase().split(' ').join('-');
         //const ext = MIME_TYPE_MAP[file.mimetype];  
@@ -139,13 +142,13 @@ const upload = multer({storage: storage})
 
 router.post('/pp',upload.single('profilepic'), async (req, res) => {
     //console.log('inside pp')
-   /// const url = req.protocol + '://' + req.get('host');
+   // const url = req.protocol + '://' + req.get('host');
     // imagePath: url + "/uploads/" + 
 
     //console.log(req.file.filename)
     const user = await User.findOneAndUpdate({_id: req.body.id},{profilePic: req.file.filename},{'new': true});
-    if(!user) return res.status(404).send('User Not Found');
     
+    if(!user) return res.status(404).send('User Not Found');
     
     res.status(200).send({
         message: "Post Added Succesccfully",

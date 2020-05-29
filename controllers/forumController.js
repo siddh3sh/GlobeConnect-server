@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose')
-
-const auth = require('../middleware/auth')
-const {Forum} = require('../models/forumModel')
-const {User} = require('../models/userModel')
-const {Post} = require('../models/postModel')
+const _ = require('lodash');
+const fs = require('fs');
+const mongoose = require('mongoose');
+const formidable = require('formidable'); const util = require('util');
+const auth = require('../middleware/auth');
+const {Forum} = require('../models/forumModel');
+const {User} = require('../models/userModel');
+const {Post} = require('../models/postModel');
 
 //get all forums
 router.get('/', async (req, res)=>{
@@ -19,13 +21,32 @@ router.post('/', async (req, res)=>{            //add later: ,auth - middleware
     // const {error} = validatePost(req.body);
     // if(err) return res.status(400).send(err.details[0].message);
 
-    let forum = new Forum({
-        name: req.body.name,
-	description: req.body.description
-    });
+    try{
+        if(!fs.existsSync('./uploads/forumPics')) fs.mkdirSync('./uploads/forumPics');
+        
+        let form  = new formidable.IncomingForm({keepExtensions: true, uploadDir: "./uploads/forumPics"});
+        form.parse(req, async (err, fields, files)=>{
+            if(err) console.log(err);
 
-    forum = await forum.save();
-    res.send(forum);
+            let forum = new Forum({
+                name: fields.name,
+                description: fields.description,
+                display_pic: {
+                    content: fs.readFileSync(files.display_pic.path),
+                    contentType: files.display_pic.type
+                }
+            })
+    
+            forum = await forum.save();
+            
+            return res.send(forum);
+        })
+    }catch(error){
+        return console.log(error.message);
+    }
+
+    
+        
 });
 
 //delete Forum
@@ -68,11 +89,12 @@ router.get('/:id', async (req, res) => {
             forum: forum,
             forumUsers: forumUsers,
             forumPosts: forumPosts
+        
         }
 
         res.send(body);
         
-    } catch (error) {
+    } catch(error) {
         res.status(500).send(error.message);
     }
     

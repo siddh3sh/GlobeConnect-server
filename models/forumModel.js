@@ -10,6 +10,10 @@ const forumSchema = new mongoose.Schema({
     },
     description: {
         type: String 
+    },
+    display_pic: {
+        content: Buffer,
+        contentType: String
     }
     
 });

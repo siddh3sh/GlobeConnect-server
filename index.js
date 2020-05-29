@@ -22,7 +22,7 @@ const adminController = require('./controllers/adminController')
 
 
 
-//make dir if not present
+//make uploads dir if not present
 let dir = './uploads';
 
 if (!fs.existsSync(dir)){
@@ -55,22 +55,22 @@ if(!config.get('jwtPrivateKey')){
   process.exit(1)
 }
 
-//app.use(db)
+
 
 //fetch db details and connect to mongoDB
 const {username, password, database} = db;
 
-//const mongoConnString = `mongodb://${host}:${port}/${database}`;
-
 const mongoConnString = `mongodb+srv://${username}:${password}@cluster0-2l6ic.mongodb.net/${database}?retryWrites=true&w=majority`
 
 console.log(mongoConnString)
+
+//establish connection to mongoDB Atlas
 mongoose.connect(mongoConnString, { useFindAndModify: false })
 .then( ()=>{
   console.log('mongodb connected..')
 })
 .catch(()=>{
-  console.log('Database Connection Failed')
+  console.log('Database Connection Failed');
 })
 
   
@@ -83,6 +83,7 @@ app.use('/content/comment', commentController);
 app.use('/content/d', discussionController);
 app.use('/forum', forumController);
 app.use('/admin', adminController)
+
 
 //Setting Port and Starting Server
 const port = process.env.PORT || 9669;
